@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type {ProductInterface} from '~/types/product'
+  import {appCrudTableHeadersConst} from '~/constants/appCrudTableHeaders.const'
 
   const {data, pending, error} = useFetch<Array<ProductInterface>>(
     '/api/products',
@@ -10,7 +11,12 @@
 </script>
 
 <template>
-  {{ data }}
+  <AppCrudTable
+    title="Gestion des produits"
+    :data="data"
+    :headers="appCrudTableHeadersConst['products']"
+    :loading="pending"
+  />
 </template>
 
 <style scoped></style>

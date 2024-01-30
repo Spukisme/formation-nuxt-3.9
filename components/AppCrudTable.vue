@@ -57,6 +57,7 @@
     :items="data"
     :loading="loading"
     class="elevation-1"
+    loading-text="Données en chargement..."
   >
     <template v-slot:top>
       <v-toolbar
