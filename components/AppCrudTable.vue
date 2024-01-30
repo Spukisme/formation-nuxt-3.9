@@ -108,7 +108,7 @@
     </template>
   </v-data-table>
   <app-crud-table-delete-dialog
-    v-model:dialogDelete="dialogDelete"
+    v-model="dialogDelete"
     :loading="dialogDeleteIsLoading"
     @validate="handleValidateDelete"
   />
