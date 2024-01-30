@@ -9,4 +9,15 @@ export default defineNuxtConfig({
     strict: true,
   },
   modules: ['@pinia/nuxt', 'vuetify-nuxt-module'],
+  vite: {
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:5000/',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+      },
+    },
+  },
 })

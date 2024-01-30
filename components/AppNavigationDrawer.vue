@@ -2,7 +2,7 @@
   import {appMenuConst} from '~/constants/appMenu.const'
 </script>
 <template>
-  <VNavigationDrawer>
+  <VNavigationDrawer class="position-fixed">
     <VList>
       <VListItem
         v-for="link in appMenuConst"
