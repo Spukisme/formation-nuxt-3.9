@@ -16,6 +16,7 @@
     :data="data"
     :headers="appCrudTableHeadersConst['products']"
     :loading="pending"
+    :error="error"
   />
 </template>
 

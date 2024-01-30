@@ -6,12 +6,14 @@
     defaultDeleteItemFunction,
     defaultEditItemFunction,
   } from '~/utils/appCrudTableDefaultFunctions'
+  import {FetchError} from 'ofetch'
 
   interface Props {
     title: string | null
     headers?: ReadonlyHeaders
     data: Array<T>
     loading: boolean
+    error?: FetchError | null
     createItemFunction?: Function
     editItemFunction?: Function
     deleteItemFunction?: Function
@@ -20,6 +22,7 @@
   const props = withDefaults(defineProps<Props>(), {
     title: null,
     loading: false,
+    error: null,
     createItemFunction: defaultCreateItemFunction,
     editItemFunction: defaultEditItemFunction,
     deleteItemFunction: defaultDeleteItemFunction,
@@ -79,6 +82,9 @@
           Ajouter
         </v-btn>
       </v-toolbar>
+    </template>
+    <template v-slot:no-data>
+      <AppCrudTableNoData :error="error" />
     </template>
     <template v-slot:item.image="{value}">
       <v-img

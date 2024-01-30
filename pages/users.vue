@@ -13,6 +13,7 @@
     :data="data"
     :headers="appCrudTableHeadersConst['users']"
     :loading="pending"
+    :error="error"
   />
 </template>
 
