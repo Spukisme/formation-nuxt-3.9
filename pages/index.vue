@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import FormCredential from '~/domains/credential/FormCredential.vue'
+</script>
 
-<template>index</template>
+<template>
+  <FormCredential />
+</template>
 
 <style scoped></style>
