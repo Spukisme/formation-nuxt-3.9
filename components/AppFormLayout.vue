@@ -1,6 +1,7 @@
 <script setup lang="ts">
   interface Props {
     submit?: () => void
+    loading?: boolean
   }
 
   const props = defineProps<Props>()
@@ -43,6 +44,8 @@
             size="large"
             variant="flat"
             text="Valider"
+            :loading="loading"
+            :disabled="!valid"
           />
         </slot>
       </VCardActions>

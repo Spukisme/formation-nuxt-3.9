@@ -2,14 +2,7 @@
   import FormCredential from '~/domains/credential/FormCredential.vue'
   import AppFormLayout from '~/components/AppFormLayout.vue'
   import type {CredentialsInterface} from '~/types/credentials'
-
-  enum Methods {
-    POST = 'POST',
-    GET = 'GET',
-    PUT = 'PUT',
-    PATCH = 'PATCH',
-    DELETE = 'DELETE',
-  }
+  import {Methods} from '~/constants/httpMethods.const'
 
   const credentials = ref<CredentialsInterface>({
     email: 'dev@test.com',

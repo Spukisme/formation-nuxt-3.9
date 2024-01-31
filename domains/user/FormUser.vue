@@ -31,7 +31,6 @@
     item-title="text"
     item-value="value"
     label="Genre"
-    @update:model-value="console.log"
     :rules="[FORM_VALIDATIONS_RULES.required]"
   />
   <v-text-field
