@@ -21,7 +21,6 @@
       @submit.prevent="handleSubmit"
       @keydown.enter.prevent="handleSubmit"
     >
-      <VCardTitle>Formation VueJS</VCardTitle>
       <VCardText>
         <slot />
       </VCardText>

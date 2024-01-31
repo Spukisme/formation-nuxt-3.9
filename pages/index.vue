@@ -38,7 +38,10 @@
 </script>
 
 <template>
-  <AppFormLayout :submit="execute">
+  <AppFormLayout
+    title="Formation VueJS"
+    :submit="execute"
+  >
     <FormCredential v-model="credentials" />
     <template #error>
       <VAlert

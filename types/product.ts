@@ -9,6 +9,6 @@ export interface ProductInterface extends EntityInterface {
   stock: number
   brand: string
   category: string
-  thumbnail: string
-  images: Array<string>
+  thumbnail?: string
+  images?: Array<string>
 }

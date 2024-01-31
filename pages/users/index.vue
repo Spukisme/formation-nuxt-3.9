@@ -14,6 +14,7 @@
     :headers="appCrudTableHeadersConst['users']"
     :loading="pending"
     :error="error"
+    :create-item-function="() => useRouter().push('/users/create')"
   />
 </template>
 

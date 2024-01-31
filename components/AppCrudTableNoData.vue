@@ -12,7 +12,7 @@
     v-if="error"
     variant="text"
     type="error"
-    text="Erreur lors de la recuperation des données."
+    text="Erreur lors de la récupération des données."
   />
   <VAlert
     v-else
