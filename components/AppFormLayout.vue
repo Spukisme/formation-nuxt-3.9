@@ -25,6 +25,7 @@
       <VCardText>
         <slot />
       </VCardText>
+      <slot name="error" />
       <VCardActions class="pa-4">
         <slot
           name="actions"

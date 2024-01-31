@@ -27,11 +27,28 @@
   onBeforeMount(() => {
     pending.value = false
   })
+
+  const textError = computed(() => {
+    if (error.value?.statusCode === 400) {
+      return 'Identifiant ou mot de passe incorrect'
+    } else if (error.value) {
+      return 'Une erreur est survenue'
+    }
+  })
 </script>
 
 <template>
   <AppFormLayout :submit="execute">
     <FormCredential v-model="credentials" />
+    <template #error>
+      <VAlert
+        v-if="!pending && error"
+        class="ma-4"
+        type="error"
+        :text="textError"
+        closable
+      />
+    </template>
     <template #actions="{valid}">
       <VBtn
         :loading="pending"
