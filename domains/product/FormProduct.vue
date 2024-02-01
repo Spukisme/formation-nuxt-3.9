@@ -2,8 +2,26 @@
   import type {ProductInterface} from '~/types/product'
   import {FORM_VALIDATIONS_RULES} from '~/constants/formValidationsRules.const'
 
-  const product = defineModel<ProductInterface | Omit<ProductInterface, 'id'>>({
-    required: true,
+  /** PROPS **/
+  interface Props {
+    modelValue: unknown
+  }
+
+  const props = defineProps<Props>()
+
+  /** EMITS **/
+  type Emits = {
+    'update:modelValue': [
+      value: ProductInterface | Omit<ProductInterface, 'id'>,
+    ]
+  }
+  const emit = defineEmits<Emits>()
+
+  /** COMPUTED **/
+  const product = computed({
+    get: () =>
+      props.modelValue as ProductInterface | Omit<ProductInterface, 'id'>,
+    set: (value) => emit('update:modelValue', value),
   })
 </script>
 

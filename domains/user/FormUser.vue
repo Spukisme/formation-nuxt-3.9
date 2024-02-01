@@ -1,19 +1,35 @@
 <script setup lang="ts">
   import type {UserInterface} from '~/types/user'
   import {FORM_VALIDATIONS_RULES} from '~/constants/formValidationsRules.const'
-
-  const user = defineModel<UserInterface | Omit<UserInterface, 'id'>>({
-    required: true,
-  })
-  const passwordVisible = ref(false)
-
-  const computedIconPassword = computed(() =>
-    passwordVisible.value ? 'mdi-eye' : 'mdi-eye-off',
-  )
+  /** CONFIG **/
   const listSelect = [
     {id: 1, text: 'Homme', value: 'male'},
     {id: 2, text: 'Femme', value: 'female'},
   ]
+  /** PROPS **/
+  interface Props {
+    modelValue: unknown
+  }
+  const props = defineProps<Props>()
+
+  /** EMITS **/
+  type Emits = {
+    'update:modelValue': [value: UserInterface | Omit<UserInterface, 'id'>]
+  }
+  const emit = defineEmits<Emits>()
+
+  /** REFS **/
+  const passwordVisible = ref(false)
+
+  /** COMPUTED **/
+  const user = computed({
+    get: () => props.modelValue as UserInterface | Omit<UserInterface, 'id'>,
+    set: (value) => emit('update:modelValue', value),
+  })
+
+  const computedIconPassword = computed(() =>
+    passwordVisible.value ? 'mdi-eye' : 'mdi-eye-off',
+  )
 </script>
 
 <template>

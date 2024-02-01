@@ -1,7 +1,16 @@
 import type {RouteLocation} from 'vue-router'
+import {entities} from '~/constants/appRouteEntities'
 
 export const isRouteValid = (route: RouteLocation) => {
-  const {id, action} = route.params as {id: string; action: string}
+  const {id, action, entity} = route.params as {
+    id: string
+    action: string
+    entity: string
+  }
+
+  if (!entities.includes(entity)) {
+    return false
+  }
 
   switch (action) {
     case 'update':
@@ -9,6 +18,6 @@ export const isRouteValid = (route: RouteLocation) => {
     case 'create':
       return id === ''
     default:
-      return false
+      return action === undefined && id === undefined
   }
 }

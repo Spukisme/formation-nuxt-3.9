@@ -1,18 +1,23 @@
-<script setup lang="ts">
-  import {userFormDefaultValueConst} from '~/domains/user/userFormDefaultValue.const'
-  import FormUser from '~/domains/user/FormUser.vue'
+<script setup lang="ts" generic="T extends EntityInterface">
   import {Methods} from '~/constants/httpMethods.const'
-  import type {UserInterface} from '~/types/user'
   import type {RouteLocation} from 'vue-router'
+  import type {EntityInterface} from '~/types/entity'
+  import {entityConfig} from '~/domains/entity.config'
+  import type {KeyFromEntities} from '~/types/keyFromEntities'
 
   definePageMeta({
     validate: (route: RouteLocation) => isRouteValid(route),
   })
   /** CONFIG **/
-  const {id, action} = useRoute().params
+  const {id, action, entity} = useRoute().params
 
   const method = action === 'update' ? Methods.PUT : Methods.POST
-  const url = action === 'update' ? `/api/users/${id}` : '/api/register'
+  const url =
+    action === 'update'
+      ? `/api/${entity}/${id}`
+      : entity === 'user'
+        ? '/api/register'
+        : `/api/${entity}`
   const subtitle = action === 'update' ? 'Modification' : 'Création'
 
   /** FETCH **/
@@ -20,17 +25,17 @@
    * Permet de récupérer les données de l'utilisateur à modifier
    * Ou affecte la valeur par défaut pour une création
    */
-  const {data: user, pending: userPending} = useFetch<
-    UserInterface | Omit<UserInterface, 'id'>
-  >(`/api/users/${id}`, {
-    immediate: action === 'update',
-    watch: false,
-    default: (): Omit<UserInterface, 'id'> =>
-      JSON.parse(JSON.stringify(userFormDefaultValueConst)) satisfies Omit<
-        UserInterface,
-        'id'
-      >,
-  })
+  const {data, pending: pendingData} = useFetch<T | Omit<T, 'id'>>(
+    `/api/${entity}/${id}`,
+    {
+      immediate: action === 'update',
+      watch: false,
+      default: () =>
+        JSON.parse(
+          JSON.stringify(entityConfig.defaultValues[entity as KeyFromEntities]),
+        ) satisfies Omit<T, 'id'>,
+    },
+  )
 
   /**
    * Permet de creer/modifier l'utilisateur
@@ -39,7 +44,7 @@
     method,
     immediate: false,
     watch: false,
-    body: user,
+    body: data,
     onResponse({response}) {
       if (response.ok) {
         useRouter().back()
@@ -48,14 +53,14 @@
   })
 
   /** COMPUTED **/
-  const loadingComputed = computed(() => userPending.value || pending.value)
+  const loadingComputed = computed(() => pendingData.value || pending.value)
 
   /** HOOKS **/
   /** Corrige le bug immediate false de useFetch **/
   onBeforeMount(() => {
     pending.value = false
     if (action === 'create') {
-      userPending.value = false
+      pendingData.value = false
     }
   })
 </script>
@@ -63,12 +68,15 @@
 <template>
   <AppFormLayout
     width="60%"
-    title="Utilisateur"
+    :title="entityConfig.title[entity as KeyFromEntities]"
     :subtitle="subtitle"
     :submit="execute"
     :loading="loadingComputed"
   >
-    <FormUser v-model="user" />
+    <component
+      :is="entityConfig.formComponent[entity as KeyFromEntities]"
+      v-model="data"
+    />
   </AppFormLayout>
 </template>
 
