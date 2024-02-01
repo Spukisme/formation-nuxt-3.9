@@ -3,14 +3,28 @@
   import FormUser from '~/domains/user/FormUser.vue'
   import {Methods} from '~/constants/httpMethods.const'
   import type {UserInterface} from '~/types/user'
+  import type {RouteLocation} from 'vue-router'
 
+  definePageMeta({
+    validate: (route: RouteLocation) => isRouteValid(route),
+  })
   /** CONFIG **/
-  const {id} = useRoute().params
+  const {id, action} = useRoute().params
+
+  const method = action === 'update' ? Methods.PUT : Methods.POST
+  const url = action === 'update' ? `/api/users/${id}` : '/api/register'
+  const subtitle = action === 'update' ? 'Modification' : 'Création'
 
   /** FETCH **/
+  /**
+   * Permet de récupérer les données de l'utilisateur à modifier
+   * Ou affecte la valeur par défaut pour une création
+   */
   const {data: user, pending: userPending} = useFetch<
     UserInterface | Omit<UserInterface, 'id'>
   >(`/api/users/${id}`, {
+    immediate: action === 'update',
+    watch: false,
     default: (): Omit<UserInterface, 'id'> =>
       JSON.parse(JSON.stringify(userFormDefaultValueConst)) satisfies Omit<
         UserInterface,
@@ -18,8 +32,11 @@
       >,
   })
 
-  const {pending, error, execute} = useFetch(`/api/users/${id}`, {
-    method: Methods.PUT,
+  /**
+   * Permet de creer/modifier l'utilisateur
+   */
+  const {pending, error, execute} = useFetch(url, {
+    method,
     immediate: false,
     watch: false,
     body: user,
@@ -37,6 +54,9 @@
   /** Corrige le bug immediate false de useFetch **/
   onBeforeMount(() => {
     pending.value = false
+    if (action === 'create') {
+      userPending.value = false
+    }
   })
 </script>
 
@@ -44,7 +64,7 @@
   <AppFormLayout
     width="60%"
     title="Utilisateur"
-    subtitle="Modification"
+    :subtitle="subtitle"
     :submit="execute"
     :loading="loadingComputed"
   >
