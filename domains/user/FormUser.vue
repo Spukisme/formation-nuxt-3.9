@@ -2,7 +2,9 @@
   import type {UserInterface} from '~/types/user'
   import {FORM_VALIDATIONS_RULES} from '~/constants/formValidationsRules.const'
 
-  const user = defineModel<Omit<UserInterface, 'id'>>({required: true})
+  const user = defineModel<UserInterface | Omit<UserInterface, 'id'>>({
+    required: true,
+  })
   const passwordVisible = ref(false)
 
   const computedIconPassword = computed(() =>

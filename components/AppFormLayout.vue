@@ -16,9 +16,13 @@
 </script>
 
 <template>
-  <VCard width="40%">
+  <VCard
+    width="40%"
+    :loading="loading"
+  >
     <VForm
       v-model="valid"
+      :disabled="loading"
       @submit.prevent="handleSubmit"
       @keydown.enter.prevent="handleSubmit"
     >

@@ -2,7 +2,9 @@
   import type {ProductInterface} from '~/types/product'
   import {FORM_VALIDATIONS_RULES} from '~/constants/formValidationsRules.const'
 
-  const product = defineModel<Omit<ProductInterface, 'id'>>({required: true})
+  const product = defineModel<ProductInterface | Omit<ProductInterface, 'id'>>({
+    required: true,
+  })
 </script>
 
 <template>

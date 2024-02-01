@@ -19,6 +19,9 @@
     :loading="pending"
     :error="error"
     :create-item-function="() => useRouter().push('/products/create')"
+    :edit-item-function="
+      ({id}: ProductInterface) => useRouter().push(`/products/update/${id}`)
+    "
   />
 </template>
 
