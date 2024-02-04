@@ -46,8 +46,8 @@
     body: data,
     onResponse({response}) {
       if (response.ok) {
-        putMessage('Modification effectuée')
-        useRouter().back()
+        putMessage(`${subtitle} effectuée`)
+        useRouter().push(`/${entity}`)
       } else {
         putMessage('Une erreur est survenue', 'error')
       }
