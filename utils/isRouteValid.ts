@@ -8,10 +8,9 @@ export const isRouteValid = (route: RouteLocation) => {
     entity: string
   }
 
-  if (!entities.includes(entity)) {
+  if (entity && !entities.includes(entity)) {
     return false
   }
-
   switch (action) {
     case 'update':
       return !!id && /^\d+$/.test(id)

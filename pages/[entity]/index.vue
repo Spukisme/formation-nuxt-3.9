@@ -1,15 +1,10 @@
 <script setup lang="ts" generic="T extends EntityInterface">
   import {appCrudTableHeadersConst} from '~/constants/appCrudTableHeaders.const'
-  import type {RouteLocation} from 'vue-router'
   import type {EntityInterface} from '~/types/entity'
   import {entityConfig} from '~/domains/entity.config'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
 
   /** CONFIG **/
-  definePageMeta({
-    validate: (route: RouteLocation) => isRouteValid(route),
-  })
-
   const {entity} = useRoute().params
 
   /** FETCH **/

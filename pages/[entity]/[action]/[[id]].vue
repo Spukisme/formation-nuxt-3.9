@@ -1,13 +1,9 @@
 <script setup lang="ts" generic="T extends EntityInterface">
   import {Methods} from '~/constants/httpMethods.const'
-  import type {RouteLocation} from 'vue-router'
   import type {EntityInterface} from '~/types/entity'
   import {entityConfig} from '~/domains/entity.config'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
 
-  definePageMeta({
-    validate: (route: RouteLocation) => isRouteValid(route),
-  })
   /** CONFIG **/
   const {id, action, entity} = useRoute().params
 
@@ -50,8 +46,8 @@
     body: data,
     onResponse({response}) {
       if (response.ok) {
-        useRouter().back()
         putMessage('Modification effectuée')
+        useRouter().back()
       } else {
         putMessage('Une erreur est survenue', 'error')
       }
