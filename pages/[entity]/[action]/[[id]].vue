@@ -20,6 +20,9 @@
         : `/api/${entity}`
   const subtitle = action === 'update' ? 'Modification' : 'Création'
 
+  /** STORES **/
+  const {putMessage} = useSnackbar()
+
   /** FETCH **/
   /**
    * Permet de récupérer les données de l'utilisateur à modifier
@@ -48,6 +51,9 @@
     onResponse({response}) {
       if (response.ok) {
         useRouter().back()
+        putMessage('Modification effectuée')
+      } else {
+        putMessage('Une erreur est survenue', 'error')
       }
     },
   })

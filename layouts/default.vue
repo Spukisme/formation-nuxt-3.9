@@ -6,6 +6,9 @@
   const {mobile} = useDisplay()
   const drawer = ref(!mobile.value)
 
+  /** STORES **/
+  const {text, color, show} = storeToRefs(useSnackbar())
+
   const handleClick = () => {
     drawer.value = !drawer.value
   }
@@ -33,6 +36,11 @@
       >
         <slot />
       </VMain>
+      <VSnackbar
+        v-model="show"
+        :text="text"
+        :color="color"
+      />
     </VLayout>
   </VApp>
 </template>
