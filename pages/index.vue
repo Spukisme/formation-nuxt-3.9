@@ -1,19 +1,38 @@
 <script setup lang="ts">
   import FormCredential from '~/domains/credential/FormCredential.vue'
   import AppFormLayout from '~/components/AppFormLayout.vue'
+  import type {UserInterface} from '~/types/user'
   import type {CredentialsInterface} from '~/types/credentials'
   import {Methods} from '~/constants/httpMethods.const'
+
+  definePageMeta({
+    layout: 'auth',
+  })
+
+  const {token, user} = storeToRefs(useAuth())
+
+  type ResponseLogin = {
+    accessToken: string
+    user: Omit<UserInterface, 'password'>
+  }
 
   const credentials = ref<CredentialsInterface>({
     email: 'dev@test.com',
     password: 'bestPassw0rd',
   })
 
-  const {data, pending, error, execute} = useFetch('/api/login', {
+  const {pending, error, execute} = useFetch<ResponseLogin>('/api/login', {
     method: Methods.POST,
     immediate: false,
     watch: false,
     body: credentials,
+    onResponse({response}) {
+      if (response.ok) {
+        token.value = response._data.accessToken
+        user.value = response._data.user
+        useRouter().push({path: '/users'})
+      }
+    },
   })
 
   /** Corrige le bug immediate false de useFetch **/
