@@ -3,14 +3,15 @@
   import type {EntityInterface} from '~/types/entity'
   import {entityConfig} from '~/domains/entity.config'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
+  import {useFetchEntityStore} from '~/stores/fetchEntityStore'
 
   /** CONFIG **/
-  const {entity} = useRoute().params
+  const {entity} = useRoute().params as {entity: string}
 
-  /** FETCH **/
-  const {data, pending, error, refresh} = useFetch<Array<T>>(`/api/${entity}`, {
-    default: () => [] as Array<T>,
-  })
+  /** STORES **/
+  const storeEntity = useFetchEntityStore<T>(entity)
+  const {data, pending, error} = storeToRefs(storeEntity)
+  const {refresh} = storeEntity
 
   const handleDeleteItem = async (item: T) => {
     await useFetch(`/api/${entity}/${item.id}`, {
