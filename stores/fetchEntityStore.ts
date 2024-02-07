@@ -28,7 +28,7 @@ export const useFetchEntityStore = <EntityType extends EntityInterface>(
     const refreshData = async () => {
       if (
         Date.now() - lastFetchTime.value >
-        (config.public.FETCH_LIST_INTERVALE as number)
+        parseInt(config.public.FETCH_LIST_INTERVALE)
       ) {
         await forceRefresh() // Force le rafraîchissement
         lastFetchTime.value = Date.now()
