@@ -1,5 +1,5 @@
 import type {EntityInterface} from '~/types/entity'
-import {useDate} from 'vuetify'
+const config = useRuntimeConfig()
 
 // const TIME_BETWEEN_FETCH = 10000
 export const useFetchEntityStore = <EntityType extends EntityInterface>(
@@ -26,7 +26,10 @@ export const useFetchEntityStore = <EntityType extends EntityInterface>(
      * dernière récupération dépasse 10000 millisecondes.
      */
     const refreshData = async () => {
-      if (Date.now() - lastFetchTime.value > 10000) {
+      if (
+        Date.now() - lastFetchTime.value >
+        (config.public.FETCH_LIST_INTERVALE as number)
+      ) {
         await forceRefresh() // Force le rafraîchissement
         lastFetchTime.value = Date.now()
       }

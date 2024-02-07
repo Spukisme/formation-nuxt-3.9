@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     typeCheck: true,
     strict: true,
   },
+  runtimeConfig: {
+    public: {
+      FETCH_LIST_INTERVALE: process.env.FETCH_LIST_INTERVALE || 100000,
+    },
+  },
   modules: ['@pinia/nuxt', 'vuetify-nuxt-module'],
   vite: {
     server: {
