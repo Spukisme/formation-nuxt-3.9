@@ -1,8 +1,8 @@
 <script setup lang="ts" generic="T extends EntityInterface">
   import {Methods} from '~/constants/httpMethods.const'
   import type {EntityInterface} from '~/types/entity'
-  import {entityConfig} from '~/domains/entity.config'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
+  import {domains} from '~/domains'
 
   /** CONFIG **/
   const {id, action, entity} = useRoute().params
@@ -32,7 +32,7 @@
       watch: false,
       default: () =>
         JSON.parse(
-          JSON.stringify(entityConfig.defaultValues[entity as KeyFromEntities]),
+          JSON.stringify(domains[entity as KeyFromEntities].defaultValueConst),
         ) satisfies Omit<T, 'id'>,
     },
   )
@@ -72,13 +72,13 @@
 <template>
   <AppFormLayout
     width="60%"
-    :title="entityConfig.title[entity as KeyFromEntities]"
+    :title="domains[entity as KeyFromEntities].titles.tableTitle"
     :subtitle="subtitle"
     :submit="execute"
     :loading="loadingComputed"
   >
     <component
-      :is="entityConfig.formComponent[entity as KeyFromEntities]"
+      :is="domains[entity as KeyFromEntities].FormComponent"
       v-model="data"
     />
   </AppFormLayout>

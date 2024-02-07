@@ -1,6 +1,6 @@
 import type {UserInterface} from '~/types/user'
 
-export const userFormDefaultValueConst = {
+export const defaultValueConst = {
   firstName: '',
   lastName: '',
   gender: '',

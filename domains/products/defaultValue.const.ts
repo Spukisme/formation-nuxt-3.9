@@ -1,6 +1,6 @@
 import type {ProductInterface} from '~/types/product'
 
-export const productFormDefaultValueConst = {
+export const defaultValueConst = {
   title: '',
   description: '',
   price: 0,

@@ -1,9 +1,8 @@
 <script setup lang="ts" generic="T extends EntityInterface">
-  import {appCrudTableHeadersConst} from '~/constants/appCrudTableHeaders.const'
   import type {EntityInterface} from '~/types/entity'
-  import {entityConfig} from '~/domains/entity.config'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
   import {useFetchEntityStore} from '~/stores/fetchEntityStore'
+  import {domains} from '~/domains'
 
   /** CONFIG **/
   const {entity} = useRoute().params as {entity: string}
@@ -31,9 +30,9 @@
 
 <template>
   <AppCrudTable
-    :title="`Gestion des ${entityConfig.titleEntity[entity as KeyFromEntities]}`"
+    :title="domains[entity as KeyFromEntities].titles.tableTitle"
     :data="data"
-    :headers="appCrudTableHeadersConst[entity as KeyFromEntities]"
+    :headers="domains[entity as KeyFromEntities].tableHeadersConst"
     :loading="pending"
     :error="error"
     :create-item-function="() => useRouter().push(`/${entity}/create`)"

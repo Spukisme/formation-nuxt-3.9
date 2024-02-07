@@ -1,3 +1,3 @@
-import {appCrudTableHeadersConst} from '~/constants/appCrudTableHeaders.const'
+import {domains} from '~/domains'
 
-export type KeyFromEntities = keyof typeof appCrudTableHeadersConst
+export type KeyFromEntities = keyof typeof domains
