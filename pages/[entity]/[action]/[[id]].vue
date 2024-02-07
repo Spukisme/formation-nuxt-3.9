@@ -18,7 +18,7 @@
 
   /** STORES **/
   const {putMessage} = useSnackbar()
-  const {refresh} = useFetchEntityStore<T>(entity as string)
+  const {forceRefresh} = useFetchEntityStore<T>(entity as string)
 
   /** FETCH **/
   /**
@@ -47,7 +47,7 @@
     body: data,
     onResponse({response}) {
       if (response.ok) {
-        refresh()
+        forceRefresh()
         putMessage(`${subtitle} effectuée`)
         useRouter().push(`/${entity}`)
       } else {

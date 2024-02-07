@@ -11,18 +11,22 @@
   /** STORES **/
   const storeEntity = useFetchEntityStore<T>(entity)
   const {data, pending, error} = storeToRefs(storeEntity)
-  const {refresh} = storeEntity
+  const {refreshData, forceRefresh} = storeEntity
 
   const handleDeleteItem = async (item: T) => {
     await useFetch(`/api/${entity}/${item.id}`, {
       method: 'DELETE',
       onResponse: ({response}) => {
         if (response.ok) {
-          refresh()
+          forceRefresh()
         }
       },
     })
   }
+
+  onBeforeMount(() => {
+    refreshData()
+  })
 </script>
 
 <template>
