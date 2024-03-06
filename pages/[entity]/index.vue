@@ -40,7 +40,18 @@
       (item: T) => useRouter().push(`/${entity}/update/${item.id}`)
     "
     :delete-item-function="handleDeleteItem"
-  />
+  >
+    <template
+      v-for="template in domains[entity as KeyFromEntities]
+        .dataTableTemplatesConst"
+      #[template.key]="props"
+    >
+      <component
+        :is="template.component"
+        v-bind="Object.assign(template.props ?? {}, props)"
+      />
+    </template>
+  </AppCrudTable>
 </template>
 
 <style scoped></style>

@@ -32,6 +32,14 @@
   const dialogDeleteIsLoading = ref(false)
   const selectedItem = ref<T>()
 
+  const keys = computed(() => {
+    return (
+      props.headers
+        ?.map((header) => header.key)
+        .filter((key) => key !== 'actions') || []
+    )
+  })
+
   /**
    * Ouvre la confirmation de suppression pour l'élément spécifié.
    *
@@ -86,20 +94,6 @@
     <template v-slot:no-data>
       <AppCrudTableNoData :error="error" />
     </template>
-    <template v-slot:item.image="{value}">
-      <v-img
-        :src="value"
-        max-height="100"
-        max-width="100"
-      />
-    </template>
-    <template v-slot:item.thumbnail="{value}">
-      <v-img
-        :src="value"
-        max-height="500"
-        max-width="500"
-      />
-    </template>
     <template v-slot:item.actions="{item}">
       <v-icon
         size="small"
@@ -112,6 +106,17 @@
         @click="openDialogDelete(item)"
         icon="mdi-delete"
       />
+    </template>
+    <template
+      v-for="key in keys"
+      #[`item.${key}`]="props"
+    >
+      <slot
+        :name="key"
+        v-bind="props"
+      >
+        {{ props.value }}
+      </slot>
     </template>
   </v-data-table>
   <app-crud-table-delete-dialog
