@@ -19,6 +19,7 @@ export const useFetchEntityStore = <EntityType extends EntityInterface>(
       onResponse(context) {
         if (!context.response.ok) lastFetchTime.value = 0
       },
+      immediate: false,
     })
 
     /**

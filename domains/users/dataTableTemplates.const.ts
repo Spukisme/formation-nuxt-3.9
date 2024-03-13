@@ -1,6 +1,8 @@
 import AppCrudTableImg from '~/components/AppCrudTableImg.vue'
+import {VChip} from 'vuetify/components'
+import type {DataTableTemplate} from '~/types/dataTableTemplate'
 
-export const dataTableTemplatesConst = [
+export const dataTableTemplatesConst: Array<DataTableTemplate> = [
   {
     key: 'image',
     component: AppCrudTableImg,
@@ -8,5 +10,10 @@ export const dataTableTemplatesConst = [
       maxWidth: '500px',
       mawHeight: '500px',
     },
+  },
+  {
+    key: 'email',
+    component: VChip,
+    target: 'text',
   },
 ]

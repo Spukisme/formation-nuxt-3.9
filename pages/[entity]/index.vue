@@ -48,7 +48,15 @@
     >
       <component
         :is="template.component"
-        v-bind="Object.assign(template.props ?? {}, props)"
+        v-bind="
+          Object.assign(
+            template.props ?? {},
+            props,
+            'target' in template && template.target
+              ? {[template.target]: props.value}
+              : {},
+          )
+        "
       />
     </template>
   </AppCrudTable>
