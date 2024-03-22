@@ -6,7 +6,7 @@ export const dataTableTemplatesConst = [
     component: AppCrudTableImg,
     props: {
       maxWidth: '150px',
-      mawHeight: '150px',
+      maxHeight: '150px',
     },
   },
 ]

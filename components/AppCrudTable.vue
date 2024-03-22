@@ -15,51 +15,17 @@
     loading: boolean
     error?: FetchError | null
     createItemFunction?: Function
-    editItemFunction?: Function
-    deleteItemFunction?: Function
   }
 
   const props = withDefaults(defineProps<Props>(), {
     title: null,
     loading: false,
     error: null,
-    createItemFunction: defaultCreateItemFunction,
-    editItemFunction: defaultEditItemFunction,
-    deleteItemFunction: defaultDeleteItemFunction,
   })
-
-  const dialogDelete = ref(false)
-  const dialogDeleteIsLoading = ref(false)
-  const selectedItem = ref<T>()
 
   const keys = computed(() => {
-    return (
-      props.headers
-        ?.map((header) => header.key)
-        .filter((key) => key !== 'actions') || []
-    )
+    return props.headers?.map((header) => header.key) || []
   })
-
-  /**
-   * Ouvre la confirmation de suppression pour l'élément spécifié.
-   *
-   * @param item - L'élément à supprimer.
-   * @return void
-   */
-  const openDialogDelete = (item: T) => {
-    dialogDelete.value = true
-    selectedItem.value = item
-  }
-
-  /**
-   * Gère la validation de la suppression.
-   */
-  const handleValidateDelete = async () => {
-    dialogDeleteIsLoading.value = true
-    await props.deleteItemFunction(selectedItem.value as T)
-    dialogDeleteIsLoading.value = false
-    dialogDelete.value = false
-  }
 </script>
 
 <template>
@@ -94,22 +60,9 @@
     <template v-slot:no-data>
       <AppCrudTableNoData :error="error" />
     </template>
-    <template v-slot:item.actions="{item}">
-      <v-icon
-        size="small"
-        class="me-2"
-        @click="editItemFunction(item)"
-        icon="mdi-pencil"
-      />
-      <v-icon
-        size="small"
-        @click="openDialogDelete(item)"
-        icon="mdi-delete"
-      />
-    </template>
     <template
       v-for="key in keys"
-      #[`item.${key}`]="props"
+      v-slot:[`item.${key}`]="props"
     >
       <slot
         :name="key"
@@ -119,11 +72,6 @@
       </slot>
     </template>
   </v-data-table>
-  <app-crud-table-delete-dialog
-    v-model="dialogDelete"
-    :loading="dialogDeleteIsLoading"
-    @validate="handleValidateDelete"
-  />
 </template>
 
 <style scoped></style>

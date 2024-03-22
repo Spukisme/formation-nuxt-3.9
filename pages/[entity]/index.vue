@@ -10,22 +10,12 @@
   /** STORES **/
   const storeEntity = useFetchEntityStore<T>(entity)
   const {data, pending, error} = storeToRefs(storeEntity)
-  const {refreshData, forceRefresh} = storeEntity
-
-  const handleDeleteItem = async (item: T) => {
-    await useFetch(`/api/${entity}/${item.id}`, {
-      method: 'DELETE',
-      onResponse: ({response}) => {
-        if (response.ok) {
-          forceRefresh()
-        }
-      },
-    })
-  }
+  const {refreshData} = storeEntity
 
   onBeforeMount(() => {
     refreshData()
   })
+
 </script>
 
 <template>
@@ -35,16 +25,11 @@
     :headers="domains[entity as KeyFromEntities].tableHeadersConst"
     :loading="pending"
     :error="error"
-    :create-item-function="() => useRouter().push(`/${entity}/create`)"
-    :edit-item-function="
-      (item: T) => useRouter().push(`/${entity}/update/${item.id}`)
-    "
-    :delete-item-function="handleDeleteItem"
   >
     <template
       v-for="template in domains[entity as KeyFromEntities]
         .dataTableTemplatesConst"
-      #[template.key]="props"
+      v-slot:[template.key]="props"
     >
       <component
         :is="template.component"
@@ -56,6 +41,9 @@
               ? {[template.target]: props.value}
               : {},
           )
+        "
+        v-on="
+          'handlers' in template && template.handlers ? template.handlers : {}
         "
       />
     </template>

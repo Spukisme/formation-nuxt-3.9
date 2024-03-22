@@ -1,11 +1,11 @@
 import type {EntityInterface} from '~/types/entity'
-const config = useRuntimeConfig()
 
-// const TIME_BETWEEN_FETCH = 10000
 export const useFetchEntityStore = <EntityType extends EntityInterface>(
   entity: string,
 ) =>
   defineStore(`${entity}-generic-store`, () => {
+    const config = useRuntimeConfig()
+
     const lastFetchTime = ref(0)
 
     /** Init Fetch refs for entity */

@@ -5,4 +5,5 @@ export interface DataTableTemplate {
   component: Component
   props?: object
   target?: string
+  handlers?: object
 }
