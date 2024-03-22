@@ -1,11 +1,6 @@
 <script setup lang="ts" generic="T extends EntityInterface">
   import type {EntityInterface} from '~/types/entity'
   import type {ReadonlyHeaders} from '~/types/headers'
-  import {
-    defaultCreateItemFunction,
-    defaultDeleteItemFunction,
-    defaultEditItemFunction,
-  } from '~/utils/appCrudTableDefaultFunctions'
   import {FetchError} from 'ofetch'
 
   interface Props {

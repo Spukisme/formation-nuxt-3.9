@@ -1,4 +1,8 @@
 import AppCrudTableImg from '~/components/AppCrudTableImg.vue'
+import {AppCrudTableActions} from '#components'
+import type {EntityInterface} from '~/types/entity'
+import {handleDeleteItem} from '~/utils/handleDeleteItem'
+import type {ProductInterface} from '~/types/product'
 
 export const dataTableTemplatesConst = [
   {
@@ -7,6 +11,19 @@ export const dataTableTemplatesConst = [
     props: {
       maxWidth: '150px',
       maxHeight: '150px',
+    },
+  },
+  {
+    key: 'actions',
+    component: AppCrudTableActions,
+    handlers: {
+      edit: (item: EntityInterface) =>
+        useRouter().push(`/products/update/${item.id}`),
+    },
+    props: {
+      deleteItemFunction: (item: ProductInterface) =>
+        handleDeleteItem(`/api/products/${item.id}`),
+      entity: 'products',
     },
   },
 ]

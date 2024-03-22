@@ -2,13 +2,9 @@ import {VChip} from 'vuetify/components'
 import type {DataTableTemplate} from '~/types/dataTableTemplate'
 import {AppCrudTableActions, AppCrudTableImg} from '#components'
 import type {EntityInterface} from '~/types/entity'
-import {$fetch} from 'ofetch'
+import {handleDeleteItem} from '~/utils/handleDeleteItem'
+import type {UserInterface} from '~/types/user'
 
-const handleDeleteItem = async (item: EntityInterface) => {
-  await $fetch(`/api/users/${item.id}`, {
-    method: 'DELETE',
-  })
-}
 export const dataTableTemplatesConst: Array<DataTableTemplate> = [
   {
     key: 'image',
@@ -39,7 +35,9 @@ export const dataTableTemplatesConst: Array<DataTableTemplate> = [
         useRouter().push(`/users/update/${item.id}`),
     },
     props: {
-      deleteItemFunction: handleDeleteItem,
+      deleteItemFunction: (item: UserInterface) =>
+        handleDeleteItem(`/api/users/${item.id}`),
+      entity: 'users',
     },
   },
 ]
