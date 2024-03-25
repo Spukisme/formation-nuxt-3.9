@@ -1,7 +1,6 @@
 import {VChip} from 'vuetify/components'
 import type {DataTableTemplate} from '~/types/dataTableTemplate'
 import {AppCrudTableActions, AppCrudTableImg} from '#components'
-import type {EntityInterface} from '~/types/entity'
 import {handleDeleteItem} from '~/utils/handleDeleteItem'
 import type {UserInterface} from '~/types/user'
 
@@ -11,7 +10,7 @@ export const dataTableTemplatesConst: Array<DataTableTemplate> = [
     component: AppCrudTableImg,
     props: {
       maxWidth: '500px',
-      mawHeight: '500px',
+      maxHeight: '500px',
     },
   },
   {
@@ -23,15 +22,10 @@ export const dataTableTemplatesConst: Array<DataTableTemplate> = [
     },
   },
   {
-    key: 'lastName',
-    component: VChip,
-    target: 'text',
-  },
-  {
     key: 'actions',
     component: AppCrudTableActions,
     handlers: {
-      edit: (item: EntityInterface) =>
+      edit: (item: UserInterface) =>
         useRouter().push(`/users/update/${item.id}`),
     },
     props: {
