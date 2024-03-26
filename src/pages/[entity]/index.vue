@@ -15,7 +15,6 @@
   onBeforeMount(() => {
     refreshData()
   })
-
 </script>
 
 <template>
