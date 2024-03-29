@@ -1,12 +1,12 @@
 export const appMenuConst = [
   {
-    name: 'Home',
-    url: '/',
+    name: 'Paniers',
+    url: '/panier',
     icon: 'mdi-home',
   },
   {
     name: 'Users',
-    url: '/users',
+    url: '/utilisateurs',
     icon: 'mdi-account',
   },
   {
