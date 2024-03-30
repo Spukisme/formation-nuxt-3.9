@@ -1,17 +1,22 @@
 <script setup lang="ts">
   interface Props {
-    submit?: () => void
     loading?: boolean
   }
 
   const props = defineProps<Props>()
 
-  const valid = ref(false)
-  const handleClickCancel = () => {
-    useRouter().back()
+  type Emit = {
+    submit: [void]
+    cancel: [void]
   }
+
+  const emit = defineEmits<Emit>()
+
+  const valid = ref(false)
+  const handleClickCancel = () => emit('cancel')
+
   const handleSubmit = () => {
-    valid.value && props.submit?.()
+    valid.value && emit('submit')
   }
 </script>
 

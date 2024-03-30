@@ -71,8 +71,9 @@
     width="60%"
     :title="domains[entity as KeyFromEntities].titles.formTitle"
     :subtitle="subtitle"
-    :submit="execute"
     :loading="loadingComputed"
+    @submit="execute"
+    @cancel="useRouter().push(`/${entity}`)"
   >
     <component
       :is="domains[entity as KeyFromEntities].FormComponent"

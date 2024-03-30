@@ -52,7 +52,7 @@
 <template>
   <AppFormLayout
     title="Formation VueJS"
-    :submit="execute"
+    @submit="execute"
   >
     <FormCredential v-model="credentials" />
     <template #error>
