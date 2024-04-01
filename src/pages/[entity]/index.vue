@@ -15,6 +15,10 @@
   onBeforeMount(() => {
     refreshData()
   })
+
+  const handleCreate = () => {
+    useRouter().push(`/${entity}/create`)
+  }
 </script>
 
 <template>
@@ -24,6 +28,7 @@
     :headers="domains[entity as KeyFromEntities].tableHeadersConst"
     :loading="pending"
     :error="error"
+    @create="handleCreate"
   >
     <template
       v-for="template in domains[entity as KeyFromEntities]

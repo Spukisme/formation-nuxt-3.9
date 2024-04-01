@@ -9,7 +9,6 @@
     data: Array<T>
     loading: boolean
     error?: FetchError | null
-    createItemFunction?: Function
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -18,9 +17,19 @@
     error: null,
   })
 
+  type Emit = {
+    (event: 'create'): void
+  }
+
+  const emit = defineEmits<Emit>()
+
   const keys = computed(() => {
     return props.headers?.map((header) => header.key) || []
   })
+
+  const handleCreate = () => {
+    emit('create')
+  }
 </script>
 
 <template>
@@ -32,25 +41,11 @@
     loading-text="Données en chargement..."
   >
     <template v-slot:top>
-      <v-toolbar
-        flat
-        v-if="title"
-      >
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        />
-        <v-spacer />
-        <v-btn
-          color="primary"
-          @click="createItemFunction"
-          :disabled="loading"
-        >
-          Ajouter
-        </v-btn>
-      </v-toolbar>
+      <AppCrudTableTitle
+        :title="title"
+        :loading="loading"
+        @create="handleCreate"
+      />
     </template>
     <template v-slot:no-data>
       <AppCrudTableNoData :error="error" />
