@@ -1,9 +1,9 @@
 export const appMenuConst = [
-  {
-    name: 'Paniers',
-    url: '/panier',
-    icon: 'mdi-home',
-  },
+  // {
+  //   name: 'Paniers',
+  //   url: '/panier',
+  //   icon: 'mdi-home',
+  // },
   {
     name: 'Users',
     url: '/utilisateurs',
