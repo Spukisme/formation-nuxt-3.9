@@ -1,12 +1,13 @@
-import AppCrudTableImg from '~/components/AppCrudTableImg.vue'
 import {AppCrudTableActions} from '#components'
 import {handleDeleteItem} from '~/utils/handleDeleteItem'
 import type {ProductInterface} from '~/types/product'
+import {VImg} from 'vuetify/components'
 
 export const dataTableTemplatesConst = [
   {
     key: 'thumbnail',
-    component: AppCrudTableImg,
+    component: VImg,
+    target: 'src',
     props: {
       maxWidth: '150px',
       maxHeight: '150px',

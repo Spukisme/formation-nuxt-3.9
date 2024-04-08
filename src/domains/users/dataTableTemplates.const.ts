@@ -1,13 +1,14 @@
-import {VChip} from 'vuetify/components'
+import {VChip, VImg} from 'vuetify/components'
 import type {DataTableTemplate} from '~/types/dataTableTemplate'
-import {AppCrudTableActions, AppCrudTableImg} from '#components'
+import {AppCrudTableActions} from '#components'
 import {handleDeleteItem} from '~/utils/handleDeleteItem'
 import type {UserInterface} from '~/types/user'
 
 export const dataTableTemplatesConst: Array<DataTableTemplate> = [
   {
     key: 'image',
-    component: AppCrudTableImg,
+    component: VImg,
+    target: 'src',
     props: {
       maxWidth: '500px',
       maxHeight: '500px',
