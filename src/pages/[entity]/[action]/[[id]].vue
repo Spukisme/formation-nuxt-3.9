@@ -37,7 +37,7 @@
   /**
    * Permet de creer/modifier l'utilisateur
    */
-  const {pending, error, execute} = useFetch(url, {
+  const {pending, execute} = useFetch(url, {
     method,
     immediate: false,
     watch: false,
