@@ -1,5 +1,6 @@
 <script setup lang="ts" generic="T">
   /**  CONFIG  **/
+  const {EDIT_MODE} = useRuntimeConfig().public
   /**  PROPS  **/
   interface Props {
     item: T
@@ -16,6 +17,11 @@
   }
   const emit = defineEmits<Emits>()
 
+  const dialog = defineModel<{
+    open: boolean
+    item: T | Omit<T, 'id'>
+    subtitle: string
+  }>()
   /**  REFS  **/
   const dialogDelete = ref(false)
   const dialogDeleteIsLoading = ref(false)
@@ -25,7 +31,9 @@
 
   /**  METHODS  **/
   const handleClickEdit = () => {
-    emit('edit', props.item)
+    if (EDIT_MODE === 'DIALOG') {
+      dialog.value = {open: true, item: props.item, subtitle: 'Modification'}
+    } else emit('edit', props.item)
   }
   /**
    * Ouvre la confirmation de suppression pour l'élément spécifié.
