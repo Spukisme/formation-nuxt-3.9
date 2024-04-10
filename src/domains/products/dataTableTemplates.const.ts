@@ -2,6 +2,7 @@ import {AppCrudTableActions} from '#components'
 import {handleDeleteItem} from '~/utils/handleDeleteItem'
 import type {ProductInterface} from '~/types/product'
 import {VImg} from 'vuetify/components'
+import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
 export const dataTableTemplatesConst = [
   {
@@ -18,7 +19,7 @@ export const dataTableTemplatesConst = [
     component: AppCrudTableActions,
     handlers: {
       edit: (item: ProductInterface) =>
-        useRouter().push(`/products/update/${item.id}`),
+        useRouter().push(`/products/${MAKE_CRUD.route.update}/${item.id}`),
     },
     props: {
       deleteItemFunction: (item: ProductInterface) =>

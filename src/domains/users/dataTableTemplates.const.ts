@@ -3,6 +3,7 @@ import type {DataTableTemplate} from '~/types/dataTableTemplate'
 import {AppCrudTableActions} from '#components'
 import {handleDeleteItem} from '~/utils/handleDeleteItem'
 import type {UserInterface} from '~/types/user'
+import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
 export const dataTableTemplatesConst: Array<DataTableTemplate> = [
   {
@@ -27,7 +28,7 @@ export const dataTableTemplatesConst: Array<DataTableTemplate> = [
     component: AppCrudTableActions,
     handlers: {
       edit: (item: UserInterface) =>
-        useRouter().push(`/utilisateurs/update/${item.id}`),
+        useRouter().push(`/utilisateurs/${MAKE_CRUD.route.update}/${item.id}`),
     },
     props: {
       deleteItemFunction: (item: UserInterface) =>

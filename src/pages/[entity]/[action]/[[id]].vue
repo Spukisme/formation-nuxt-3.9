@@ -33,7 +33,7 @@
   const {data, pending: pendingData} = useFetch<T | Omit<T, 'id'>>(
     `/api/${route}/${id}`,
     {
-      immediate: action === 'update',
+      immediate: action === MAKE_CRUD.route.update,
       watch: false,
       default: () =>
         JSON.parse(
@@ -68,7 +68,7 @@
   /** Corrige le bug immediate false de useFetch **/
   onBeforeMount(() => {
     pending.value = false
-    if (action === 'create') {
+    if (action === MAKE_CRUD.route.create) {
       pendingData.value = false
     }
   })

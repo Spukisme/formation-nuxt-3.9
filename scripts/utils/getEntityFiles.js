@@ -23,6 +23,7 @@ export const getEntityFiles = (entityName, routeName) => {
         "import type {DataTableTemplate} from '~/types/dataTableTemplate.js'\n" +
         "import {AppCrudTableActions} from '#components'\n" +
         `import type {${capitalizedSingularName}Interface} from '~/types/${lowercaseSingularName}'\n` +
+        "import {MAKE_CRUD} from '~/constants/makeCrud.config'" +
         '\n' +
         'export const dataTableTemplatesConst: Array<DataTableTemplate> = [\n' +
         '  /**\n' +
@@ -40,7 +41,7 @@ export const getEntityFiles = (entityName, routeName) => {
         `    edit: (item: ${capitalizedSingularName}Interface) =>\n` +
         '        useRouter().push(`/' +
         routeName +
-        '/update/${item.id}`),\n' +
+        '/${MAKE_CRUD.route.update}/${item.id}`),\n' +
         '    },\n' +
         '    props: {\n' +
         `      deleteItemFunction: (item: ${capitalizedSingularName}Interface) =>\n` +
