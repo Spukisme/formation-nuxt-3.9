@@ -6,6 +6,7 @@
   import {EDIT_MODES} from '~/constants/editMode.const'
   import {HTTP_METHODS} from '~/constants/httpMethods.const'
   import {MAKE_CRUD} from '~/constants/makeCrud.config'
+  import type {EditDialogModel} from '~/types/editDialog'
 
   /** CONFIG **/
   const {entity} = useRoute().params as {entity: string}
@@ -19,35 +20,29 @@
   const {putMessage} = useSnackbar()
 
   /** REFS **/
-  const openDialog = ref(false)
-  const selectedItem = ref(domains[entity as KeyFromEntities].defaultValueConst)
-  const subtitle = ref('')
-
-  /** COMPUTED **/
-  const dialogComputed = computed({
-    get: () => ({
-      open: openDialog.value,
-      item: selectedItem.value,
-      subtitle: subtitle.value,
-    }),
-    set: (value) => {
-      openDialog.value = value.open
-      selectedItem.value = value.item
-      subtitle.value = value.subtitle
-    },
+  const dialog = ref<EditDialogModel<any>>({
+    open: false,
+    item: domains[entity as KeyFromEntities].defaultValueConst,
+    subtitle: '',
   })
 
+  /** COMPUTED **/
+  /**  Permet de passer un réactif au useFetch()  **/
+  const selectedItemComputed = computed(() => dialog.value.item)
+
+  /**  Calcule la methode HTTP en fonction de la présence d'un id dans item **/
   const methodComputed = computed(() => {
-    if (dialogComputed.value.item && 'id' in dialogComputed.value.item) {
+    if (dialog.value.item && 'id' in dialog.value.item) {
       return HTTP_METHODS.PUT
     } else {
       return HTTP_METHODS.POST
     }
   })
 
+  /**  Calcule l'apiPath en fonction de l'entité  et de l'id  **/
   const apiPathComputed = computed(
     () =>
-      `api/${domains[entity as KeyFromEntities].route}${dialogComputed.value.item && 'id' in dialogComputed.value.item ? `/${dialogComputed.value.item.id}` : ''}`,
+      `api/${domains[entity as KeyFromEntities].route}${dialog.value.item && 'id' in dialog.value.item ? `/${dialog.value.item.id}` : ''}`,
   )
 
   /** FETCH **/
@@ -55,12 +50,12 @@
     method: methodComputed,
     immediate: false,
     watch: false,
-    body: selectedItem,
+    body: selectedItemComputed,
     onResponse({response}) {
       if (response.ok) {
         forceRefresh()
-        putMessage(`${subtitle.value} effectuée`)
-        openDialog.value = false
+        putMessage(`${dialog.value.subtitle} effectuée`)
+        dialog.value.open = false
       } else {
         putMessage('Une erreur est survenue', 'error')
       }
@@ -70,17 +65,25 @@
   /** LIFECYCLE **/
   onBeforeMount(() => {
     refreshData()
+    //corrige le pending en immediate = false sur le fetch
     pendingForm.value = false
   })
 
   /** METHODS **/
+  /**  Création en fonction du mode d'édition configuré  **/
   const handleCreate = () => {
     if (MAKE_CRUD.editMode === EDIT_MODES.DIALOG) {
-      openDialog.value = true
-      subtitle.value = 'Création'
-      selectedItem.value = domains[entity as KeyFromEntities].defaultValueConst
-    } else useRouter().push(`/${entity}/create`)
+      dialog.value.open = true
+      dialog.value.subtitle = MAKE_CRUD.subtitle.create
+      dialog.value.item = domains[entity as KeyFromEntities].defaultValueConst
+    } else useRouter().push(`/${entity}/${MAKE_CRUD.route.create}`)
   }
+  /**
+   * S'execute lorsque le model de dialog est mis à jour
+   * @param value
+   */
+  const handleChangeModelValue = (value: EditDialogModel<T>) =>
+    (dialog.value = value)
 </script>
 
 <template>
@@ -107,7 +110,7 @@
             'target' in template && template.target
               ? {[template.target]: props.value}
               : {},
-            template.key === 'actions' ? {modelValue: dialogComputed} : {},
+            template.key === 'actions' ? {modelValue: dialog} : {},
           )
         "
         v-on="
@@ -117,7 +120,7 @@
               : {},
             template.key === 'actions'
               ? {
-                  'update:modelValue': (value: any) => (dialogComputed = value),
+                  'update:modelValue': handleChangeModelValue,
                 }
               : {},
           )
@@ -126,21 +129,21 @@
     </template>
   </AppCrudTable>
   <VDialog
-    v-model="openDialog"
+    v-model="dialog.open"
     width="40%"
     min-width="300px"
   >
     <AppFormLayout
       width="100%"
       :title="domains[entity as KeyFromEntities].titles.tableTitle"
-      :subtitle="subtitle"
+      :subtitle="dialog.subtitle"
       :loading="pendingForm"
       @submit="execute"
-      @cancel="openDialog = false"
+      @cancel="dialog.open = false"
     >
       <component
         :is="domains[entity as KeyFromEntities].FormComponent"
-        v-model="selectedItem"
+        v-model="dialog.item"
       />
     </AppFormLayout>
   </VDialog>

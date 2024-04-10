@@ -1,4 +1,4 @@
-import type {HTTPMethod} from '~/types/method'
+import type {HTTPMethod} from '~/types/httpMethod'
 
 export const HTTP_METHODS: {
   [key: string]: HTTPMethod

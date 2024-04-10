@@ -12,12 +12,13 @@ export const isRouteValid = (route: RouteLocation) => {
   if (entity && !MAKE_CRUD.authorizedEntities.includes(entity)) {
     return false
   }
+
   switch (action) {
-    case 'update':
+    case MAKE_CRUD.route.update:
       return (
         MAKE_CRUD.editMode !== EDIT_MODES.DIALOG && !!id && /^\d+$/.test(id)
       )
-    case 'create':
+    case MAKE_CRUD.route.create:
       return MAKE_CRUD.editMode !== EDIT_MODES.DIALOG && id === ''
     default:
       return action === undefined && id === undefined
