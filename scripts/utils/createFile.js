@@ -1,16 +1,17 @@
 import {join} from 'path'
 import {writeFileSync} from 'fs'
+import {bgSuccess} from '../cliColors.config.js'
 
 /**
- * Creates a file in the specified directory
+ * Function to create a file at a specified location
  * @param {Object} file - The file object containing fileName and content
- * @param {string} directory - The directory path where the file will be created
+ * @param {Object} options - The options object containing base and short paths
  */
-export const createFile = (file, directory) => {
+export const createFile = (file, {base, short}) => {
   // Construct the full file path
-  const filePath = join(directory, file.fileName)
+  const filePath = join(base, file.fileName)
   // Write the file content to the specified path
   writeFileSync(filePath, file.content)
   // Log the creation of the file
-  console.log(`Created ${filePath}`)
+  console.log(bgSuccess(` CREATE `) + ` ${join(short, file.fileName)}`)
 }

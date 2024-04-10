@@ -19,7 +19,7 @@ export const isExistingEntity = (filePath, entityName) => {
     // Check if the file with the formatted entity name exists and return the type
     (existsSync(
       join(
-        directories.types,
+        directories.types.base,
         getFormatedNames(entityName).lowercaseSingularName,
       ),
     ) &&

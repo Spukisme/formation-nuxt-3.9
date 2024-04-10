@@ -1,12 +1,17 @@
 import {readFileSync, writeFileSync} from 'fs'
+import {join} from 'path'
+import {bgUpdate} from '../cliColors.config.js'
 
 /**
  * Update domains with new entity and route
- * @param {string} filePath - Path to the file to be updated
- * @param {string} entityName - Name of the entity
- * @param {string} routeName - Name of the route
+ * @param {string} base - The base path object
+ * @param {string} short - The short path object
+ * @param {string} entityName - The name of the entity
+ * @param {string} routeName - The name of the route
  */
-export const updateDomains = (filePath, entityName, routeName) => {
+export const updateDomains = ({base, short}, entityName, routeName) => {
+  // Construct the full file path
+  const filePath = join(base, 'index.ts')
   // Read content from the file
   let content = readFileSync(filePath, 'utf8')
 
@@ -29,5 +34,5 @@ export const updateDomains = (filePath, entityName, routeName) => {
   // Generate new content and write it back to the file
   const newContent = `${newImports.join('\n')}\n\nexport const domains = {\n${newDomains.join('\n')}\n}\n`
   writeFileSync(filePath, newContent)
-  console.log(`Updated ${filePath}`)
+  console.log(bgUpdate(` UPDATE `) + ` ${join(short, 'index.ts')}`)
 }

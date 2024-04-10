@@ -1,4 +1,5 @@
 import {join} from 'path'
+import {success, bgError, bgInfo, warning} from './cliColors.config.js'
 import {askForStr} from './utils/askForStr.js'
 import {updateDomains} from './utils/updateDomains.js'
 import {isExistingEntity} from './utils/isExistingEntity.js'
@@ -14,12 +15,16 @@ import {optionsConfigureFileConfig} from './optionsConfigureFile.config.js'
 
 // Utilisation du script makeCrud.js : makeCrud [nom de l'entité] [nom du route]
 async function main() {
+  console.log(bgInfo(' INFO ') + ' CTRL + C to exit.')
+  console.log(bgInfo(' INFO ') + ' The default value is always in UPPERCASE when there are multiple choices.')
+  console.log(bgInfo(' INFO ') + ' When a default value is available, you can press ENTER to validate it or TAB for autocomplete.\n')
+
   /** get the name of the entity from the command line or ask the user **/
   const entityName =
-    process.argv[2] || (await askForStr('Enter the name of the entity: '))
+    process.argv[2] || (await askForStr(success('Enter the name of the entity from the API') + '\n> '))
   /** if no entity name is provided, exit the script with an error message **/
   if (!entityName) {
-    console.error('Please provide the name of the entity.')
+    console.error(bgError(' ERROR ') + ' Please provide the name of the entity.')
     process.exit(1)
   }
   /**
@@ -29,41 +34,53 @@ async function main() {
   const routeName =
     process.argv[3] ||
     (await askForStr(
-      `Enter the Route for this entity: (default: ${entityName}) `,
+      success(`Enter the Route for this entity`) + ` (default: ${warning(entityName)})` + '\n> ',
+      entityName,
     )) ||
     entityName
 
   /** Name to use **/
   const {lowercaseName} = getFormatedNames(entityName)
   /** File & Directory **/
-  const domainsFile = join(directories.domains, 'index.ts')
+  const domainsFile = join(directories.domains.base, 'index.ts')
   const directoriesWithEntity = {
     ...directories,
-    entity: join(directories.domains, lowercaseName),
+    entity: {
+      base: join(directories.domains.base, lowercaseName),
+      short: join(directories.domains.short, lowercaseName),
+    },
   }
 
   /** Check if the entity already exists in the domains file **/
   const entityExists = isExistingEntity(domainsFile, entityName)
   if (!!entityExists) {
-    console.log(`Entity ${entityName} already exists in ${entityExists}.`)
+    console.log(bgError(' ERROR ') + ` Entity ${entityName} already exists in ${entityExists}.`)
     process.exit(1)
   } else {
-    console.log(`Creating Crud for ${entityName}...`)
+    console.log('') // Make the separation between the entity and the crud config
+    console.log(bgInfo(' INFO ') + ` Creating Crud for ${entityName}...`)
     /** Populate the header file with the columns **/
     const tableHeaders = await configureFile(
       'table',
       optionsConfigureFileConfig.table,
     )
-
+    console.log('') // Make the separation between the header and the type
     /** Populate the type file with the properties **/
     const tableTypes = await configureFile(
       'interface',
       optionsConfigureFileConfig.type,
     )
 
-    /** Create the directories and files **/
-    Object.values(directoriesWithEntity).forEach(createDirectory)
+    console.log('\n' + bgInfo(' INFO ') + ` Creating files in project ${directories.project}` + '\n')
 
+    /** Create the directories **/
+    console.log(bgInfo('    CREATING DIRECTORIES    '))
+    Object.values(directoriesWithEntity).filter(dir => dir.base).forEach(createDirectory)
+
+    console.log('') // Make the separation between the directories and the files
+
+    /** Create the files **/
+    console.log(bgInfo('       CREATING FILES       '))
     getEntityFiles(entityName, routeName).forEach((file) =>
       createFile(file, directoriesWithEntity.entity),
     )
@@ -72,7 +89,7 @@ async function main() {
     createFile(getTypeFile(entityName, tableTypes), directories.types)
 
     /** Update the domains file with the new entity **/
-    updateDomains(domainsFile, entityName, routeName)
+    updateDomains(directories.domains, entityName, routeName)
   }
 }
 
