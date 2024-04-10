@@ -34,7 +34,11 @@
   /**  METHODS  **/
   const handleClickEdit = () => {
     if (MAKE_CRUD.editMode === EDIT_MODES.DIALOG) {
-      dialog.value = {open: true, item: props.item, subtitle: 'Modification'}
+      dialog.value = {
+        open: true,
+        item: JSON.parse(JSON.stringify(props.item)),
+        subtitle: 'Modification',
+      }
     } else emit('edit', props.item)
   }
   /**

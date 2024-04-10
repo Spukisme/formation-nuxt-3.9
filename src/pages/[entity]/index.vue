@@ -75,7 +75,9 @@
     if (MAKE_CRUD.editMode === EDIT_MODES.DIALOG) {
       dialog.value.open = true
       dialog.value.subtitle = MAKE_CRUD.subtitle.create
-      dialog.value.item = domains[entity as KeyFromEntities].defaultValueConst
+      dialog.value.item = JSON.parse(
+        JSON.stringify(domains[entity as KeyFromEntities].defaultValueConst),
+      )
     } else useRouter().push(`/${entity}/${MAKE_CRUD.route.create}`)
   }
   /**
