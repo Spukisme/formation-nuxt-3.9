@@ -1,12 +1,14 @@
-import AppCrudTableImg from '~/components/AppCrudTableImg.vue'
 import {AppCrudTableActions} from '#components'
 import {handleDeleteItem} from '~/utils/handleDeleteItem'
 import type {ProductInterface} from '~/types/product'
+import {VImg} from 'vuetify/components'
+import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
 export const dataTableTemplatesConst = [
   {
     key: 'thumbnail',
-    component: AppCrudTableImg,
+    component: VImg,
+    target: 'src',
     props: {
       maxWidth: '150px',
       maxHeight: '150px',
@@ -17,7 +19,7 @@ export const dataTableTemplatesConst = [
     component: AppCrudTableActions,
     handlers: {
       edit: (item: ProductInterface) =>
-        useRouter().push(`/products/update/${item.id}`),
+        useRouter().push(`/products/${MAKE_CRUD.route.update}/${item.id}`),
     },
     props: {
       deleteItemFunction: (item: ProductInterface) =>

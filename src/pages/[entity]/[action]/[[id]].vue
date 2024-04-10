@@ -1,17 +1,25 @@
 <script setup lang="ts" generic="T extends EntityInterface">
-  import {Methods} from '~/constants/httpMethods.const'
+  import {HTTP_METHODS} from '~/constants/httpMethods.const'
   import type {EntityInterface} from '~/types/entity'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
   import {domains} from '~/domains'
+  import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
   /** CONFIG **/
   const {id, action, entity} = useRoute().params
 
   const route = domains[entity as KeyFromEntities].route
 
-  const method = action === 'update' ? Methods.PUT : Methods.POST
-  const url = action === 'update' ? `/api/${route}/${id}` : `/api/${route}`
-  const subtitle = action === 'update' ? 'Modification' : 'Création'
+  const method =
+    action === MAKE_CRUD.route.update ? HTTP_METHODS.PUT : HTTP_METHODS.POST
+
+  const url =
+    action === MAKE_CRUD.route.update ? `/api/${route}/${id}` : `/api/${route}`
+
+  const subtitle =
+    action === MAKE_CRUD.route.update
+      ? MAKE_CRUD.subtitle.update
+      : MAKE_CRUD.subtitle.create
 
   /** STORES **/
   const {putMessage} = useSnackbar()
@@ -25,7 +33,7 @@
   const {data, pending: pendingData} = useFetch<T | Omit<T, 'id'>>(
     `/api/${route}/${id}`,
     {
-      immediate: action === 'update',
+      immediate: action === MAKE_CRUD.route.update,
       watch: false,
       default: () =>
         JSON.parse(
@@ -37,7 +45,7 @@
   /**
    * Permet de creer/modifier l'utilisateur
    */
-  const {pending, error, execute} = useFetch(url, {
+  const {pending, execute} = useFetch(url, {
     method,
     immediate: false,
     watch: false,
@@ -60,7 +68,7 @@
   /** Corrige le bug immediate false de useFetch **/
   onBeforeMount(() => {
     pending.value = false
-    if (action === 'create') {
+    if (action === MAKE_CRUD.route.create) {
       pendingData.value = false
     }
   })
@@ -71,8 +79,9 @@
     width="60%"
     :title="domains[entity as KeyFromEntities].titles.formTitle"
     :subtitle="subtitle"
-    :submit="execute"
     :loading="loadingComputed"
+    @submit="execute"
+    @cancel="useRouter().push(`/${entity}`)"
   >
     <component
       :is="domains[entity as KeyFromEntities].FormComponent"
