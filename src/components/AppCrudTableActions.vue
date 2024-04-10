@@ -1,6 +1,8 @@
 <script setup lang="ts" generic="T">
   /**  CONFIG  **/
-  const {EDIT_MODE} = useRuntimeConfig().public
+  import {EDIT_MODES} from '~/constants/editMode.const'
+  import {MAKE_CRUD} from '~/constants/makeCrud.config'
+
   /**  PROPS  **/
   interface Props {
     item: T
@@ -31,7 +33,7 @@
 
   /**  METHODS  **/
   const handleClickEdit = () => {
-    if (EDIT_MODE === 'DIALOG') {
+    if (MAKE_CRUD.editMode === EDIT_MODES.DIALOG) {
       dialog.value = {open: true, item: props.item, subtitle: 'Modification'}
     } else emit('edit', props.item)
   }

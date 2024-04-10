@@ -1,17 +1,25 @@
 <script setup lang="ts" generic="T extends EntityInterface">
-  import {Methods} from '~/constants/httpMethods.const'
+  import {HTTP_METHODS} from '~/constants/httpMethods.const'
   import type {EntityInterface} from '~/types/entity'
   import type {KeyFromEntities} from '~/types/keyFromEntities'
   import {domains} from '~/domains'
+  import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
   /** CONFIG **/
   const {id, action, entity} = useRoute().params
 
   const route = domains[entity as KeyFromEntities].route
 
-  const method = action === 'update' ? Methods.PUT : Methods.POST
-  const url = action === 'update' ? `/api/${route}/${id}` : `/api/${route}`
-  const subtitle = action === 'update' ? 'Modification' : 'Création'
+  const method =
+    action === MAKE_CRUD.route.update ? HTTP_METHODS.PUT : HTTP_METHODS.POST
+
+  const url =
+    action === MAKE_CRUD.route.update ? `/api/${route}/${id}` : `/api/${route}`
+
+  const subtitle =
+    action === MAKE_CRUD.route.update
+      ? MAKE_CRUD.subtitle.update
+      : MAKE_CRUD.subtitle.create
 
   /** STORES **/
   const {putMessage} = useSnackbar()

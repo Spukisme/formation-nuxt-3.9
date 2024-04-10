@@ -3,10 +3,13 @@
   import type {KeyFromEntities} from '~/types/keyFromEntities'
   import {useFetchEntityStore} from '~/stores/fetchEntityStore'
   import {domains} from '~/domains'
+  import {EDIT_MODES} from '~/constants/editMode.const'
+  import {HTTP_METHODS} from '~/constants/httpMethods.const'
+  import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
   /** CONFIG **/
   const {entity} = useRoute().params as {entity: string}
-  const {EDIT_MODE} = useRuntimeConfig().public
+
   /** STORES **/
   const storeEntity = useFetchEntityStore<T>(
     domains[entity as KeyFromEntities].route,
@@ -36,9 +39,9 @@
 
   const methodComputed = computed(() => {
     if (dialogComputed.value.item && 'id' in dialogComputed.value.item) {
-      return 'PUT'
+      return HTTP_METHODS.PUT
     } else {
-      return 'POST'
+      return HTTP_METHODS.POST
     }
   })
 
@@ -72,7 +75,7 @@
 
   /** METHODS **/
   const handleCreate = () => {
-    if (EDIT_MODE === 'DIALOG') {
+    if (MAKE_CRUD.editMode === EDIT_MODES.DIALOG) {
       openDialog.value = true
       subtitle.value = 'Création'
       selectedItem.value = domains[entity as KeyFromEntities].defaultValueConst

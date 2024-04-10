@@ -1,23 +1,24 @@
 import type {RouteLocation} from 'vue-router'
-import {entities} from '~/constants/appRouteEntities'
+import {EDIT_MODES} from '~/constants/editMode.const'
+import {MAKE_CRUD} from '~/constants/makeCrud.config'
 
 export const isRouteValid = (route: RouteLocation) => {
-  const {EDIT_MODE} = useRuntimeConfig().public
-
   const {id, action, entity} = route.params as {
     id: string
     action: string
     entity: string
   }
 
-  if (entity && !entities.includes(entity)) {
+  if (entity && !MAKE_CRUD.authorizedEntities.includes(entity)) {
     return false
   }
   switch (action) {
     case 'update':
-      return EDIT_MODE !== 'DIALOG' && !!id && /^\d+$/.test(id)
+      return (
+        MAKE_CRUD.editMode !== EDIT_MODES.DIALOG && !!id && /^\d+$/.test(id)
+      )
     case 'create':
-      return EDIT_MODE !== 'DIALOG' && id === ''
+      return MAKE_CRUD.editMode !== EDIT_MODES.DIALOG && id === ''
     default:
       return action === undefined && id === undefined
   }

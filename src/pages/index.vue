@@ -3,7 +3,7 @@
   import AppFormLayout from '~/components/AppFormLayout.vue'
   import type {UserInterface} from '~/types/user'
   import type {CredentialsInterface} from '~/types/credentials'
-  import {Methods} from '~/constants/httpMethods.const'
+  import {HTTP_METHODS} from '~/constants/httpMethods.const'
 
   definePageMeta({
     layout: 'auth',
@@ -22,7 +22,7 @@
   })
 
   const {pending, error, execute} = useFetch<ResponseLogin>('/api/login', {
-    method: Methods.POST,
+    method: HTTP_METHODS.POST,
     immediate: false,
     watch: false,
     body: credentials,
